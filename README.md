@@ -1,4 +1,4 @@
-# Project Title: [Project Name]
+# Project Title: biu
 
 Welcome to the development repository! This project is a high-octane action game built in **[Godot 4.5.1 (Mono/C# Edition)](https://godotengine.org/download)**. The core experience revolves around a "destruction-first" philosophy, where players use explosive forces to both dismantle the environment and navigate through it.
 
