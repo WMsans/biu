@@ -1,7 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://biht6m8hp5ua2"]
+[gd_scene load_steps=5 format=3 uid="uid://biht6m8hp5ua2"]
 
 [ext_resource type="PackedScene" uid="uid://dmobj48t0e52h" path="res://terrains/biu_world.ldtk" id="1_8cg7g"]
 [ext_resource type="PackedScene" uid="uid://bff2w370b4ou8" path="res://scenes/prefabs/player.tscn" id="2_syyn5"]
+[ext_resource type="Texture2D" uid="uid://t731mpyiiedy" path="res://textures/icon.svg" id="3_7wxeb"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_weoh1"]
+size = Vector2(16, 16)
 
 [node name="Test" type="Node2D"]
 
@@ -13,3 +17,14 @@ position = Vector2(64, 80)
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(144, 80)
 zoom = Vector2(4, 4)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." groups=["box"]]
+position = Vector2(96, 96)
+collision_layer = 4
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D"]
+scale = Vector2(0.125, 0.125)
+texture = ExtResource("3_7wxeb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("RectangleShape2D_weoh1")
