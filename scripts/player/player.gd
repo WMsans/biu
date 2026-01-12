@@ -9,6 +9,8 @@ extends Node2D
 @export_flags_2d_physics var box_layer: int = 4
 
 @onready var ray: RayCast2D = $RayCast2D
+# Reference the child component
+@onready var bomb_placer: Node2D = $BombPlacer 
 
 var is_moving: bool = false
 var input_buffer: Vector2 = Vector2.ZERO 
@@ -26,6 +28,10 @@ func _unhandled_input(event: InputEvent) -> void:
 			attempt_move(inputs[dir])
 
 func attempt_move(direction: Vector2) -> void:
+	# Update the BombPlacer's direction immediately
+	if bomb_placer:
+		bomb_placer.update_direction(direction)
+		
 	if is_moving:
 		input_buffer = direction
 		return
@@ -35,7 +41,6 @@ func move(direction: Vector2) -> void:
 	var target_pos = position + (direction * tile_size)
 	
 	# 1. Check WALLS (Water)
-	# The player cannot walk on water directly
 	ray.target_position = direction * tile_size
 	ray.collision_mask = wall_layer
 	ray.force_raycast_update()
@@ -63,9 +68,6 @@ func can_push_box(box: Node2D, direction: Vector2) -> bool:
 	
 	ray.global_position = box.global_position
 	
-	# CHANGE: We ONLY check for other boxes. 
-	# We REMOVED 'wall_layer' from the mask because walls are water,
-	# and we want to allow pushing into water.
 	ray.collision_mask = box_layer 
 	ray.force_raycast_update()
 	
@@ -81,7 +83,6 @@ func push_box(box: Node2D, direction: Vector2) -> void:
 	tween.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tween.tween_property(box, "position", box_target, move_speed)
 	
-	# CHANGE: After moving, tell the box to check if it landed on water
 	tween.tween_callback(Callable(box, "check_on_water"))
 
 func move_player(target_pos: Vector2) -> void:
