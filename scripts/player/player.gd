@@ -2,7 +2,6 @@ extends Node2D
 
 # SETTINGS
 @export var tile_size: int = 16
-# Made default faster (0.2 -> 0.12)
 @export var move_speed: float = 0.12 
 
 # COLLISION MASKS
@@ -12,7 +11,7 @@ extends Node2D
 @onready var ray: RayCast2D = $RayCast2D
 
 var is_moving: bool = false
-var input_buffer: Vector2 = Vector2.ZERO # Stores the next input
+var input_buffer: Vector2 = Vector2.ZERO 
 
 var inputs: Dictionary = {
 	"ui_right": Vector2.RIGHT,
@@ -21,9 +20,6 @@ var inputs: Dictionary = {
 	"ui_down": Vector2.DOWN
 }
 
-func _ready() -> void:
-	position = position.snapped(Vector2.ONE * tile_size)
-
 func _unhandled_input(event: InputEvent) -> void:
 	for dir in inputs.keys():
 		if event.is_action_pressed(dir):
@@ -31,23 +27,21 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func attempt_move(direction: Vector2) -> void:
 	if is_moving:
-		# If we are already moving, cache this input to execute later
 		input_buffer = direction
 		return
-	
-	# Otherwise, execute immediately
 	move(direction)
 
 func move(direction: Vector2) -> void:
 	var target_pos = position + (direction * tile_size)
 	
-	# 1. Check WALLS
+	# 1. Check WALLS (Water)
+	# The player cannot walk on water directly
 	ray.target_position = direction * tile_size
 	ray.collision_mask = wall_layer
 	ray.force_raycast_update()
 	
 	if ray.is_colliding():
-		return
+		return # Blocked by water
 
 	# 2. Check BOXES
 	ray.collision_mask = box_layer
@@ -60,16 +54,19 @@ func move(direction: Vector2) -> void:
 				push_box(box, direction)
 				move_player(target_pos)
 		else:
-			return # Hit non-box object on box layer
+			return 
 	else:
-		# Path Clear
 		move_player(target_pos)
 
 func can_push_box(box: Node2D, direction: Vector2) -> bool:
 	var original_global_pos = ray.global_position
 	
 	ray.global_position = box.global_position
-	ray.collision_mask = wall_layer + box_layer
+	
+	# CHANGE: We ONLY check for other boxes. 
+	# We REMOVED 'wall_layer' from the mask because walls are water,
+	# and we want to allow pushing into water.
+	ray.collision_mask = box_layer 
 	ray.force_raycast_update()
 	
 	var is_blocked = ray.is_colliding()
@@ -81,29 +78,23 @@ func push_box(box: Node2D, direction: Vector2) -> void:
 	var box_target = box.position + (direction * tile_size)
 	var tween = create_tween()
 	
-	# BOUNCY ANIMATION SETTINGS
 	tween.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	
 	tween.tween_property(box, "position", box_target, move_speed)
+	
+	# CHANGE: After moving, tell the box to check if it landed on water
+	tween.tween_callback(Callable(box, "check_on_water"))
 
 func move_player(target_pos: Vector2) -> void:
 	is_moving = true
 	var tween = create_tween()
 	
-	# BOUNCY ANIMATION SETTINGS
-	# TRANS_BACK makes it overshoot slightly and snap back
 	tween.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	
 	tween.tween_property(self, "position", target_pos, move_speed)
-	
-	# Connect callback to handle the Buffer
 	tween.tween_callback(_on_move_finished)
 
 func _on_move_finished() -> void:
 	is_moving = false
-	
-	# Check if we have a buffered input waiting
 	if input_buffer != Vector2.ZERO:
 		var next_move = input_buffer
-		input_buffer = Vector2.ZERO # Clear buffer
+		input_buffer = Vector2.ZERO
 		attempt_move(next_move)
