@@ -13,6 +13,7 @@ extends Node2D
 
 var is_moving: bool = false
 var input_buffer: Vector2 = Vector2.ZERO 
+var movement_tween: Tween # Track the active tween to allow cancelling
 
 var inputs: Dictionary = {
 	"ui_right": Vector2.RIGHT,
@@ -79,10 +80,12 @@ func push_box(box: Node2D, direction: Vector2) -> void:
 
 func move_player(target_pos: Vector2) -> void:
 	is_moving = true
-	var tween = create_tween()
-	tween.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tween.tween_property(self, "position", target_pos, move_speed)
-	tween.tween_callback(_on_move_finished)
+	
+	if movement_tween: movement_tween.kill()
+	movement_tween = create_tween()
+	movement_tween.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	movement_tween.tween_property(self, "position", target_pos, move_speed)
+	movement_tween.tween_callback(_on_move_finished)
 
 func _on_move_finished() -> void:
 	is_moving = false
@@ -102,11 +105,12 @@ func apply_knockback(direction: Vector2, distance: int) -> void:
 	# We assume explosion force sends player flying OVER walls/water
 	var target_pos = position + (direction * tile_size * distance)
 	
-	var tween = create_tween()
-	tween.set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
-	tween.tween_property(self, "position", target_pos, 0.4)
+	if movement_tween: movement_tween.kill()
+	movement_tween = create_tween()
+	movement_tween.set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+	movement_tween.tween_property(self, "position", target_pos, 0.4)
 	
-	tween.tween_callback(func():
+	movement_tween.tween_callback(func():
 		# Check if we landed on Safe Ground
 		# We check for collisions with the 'Wall/Water' layer at our feet.
 		var space_state = get_world_2d().direct_space_state
@@ -121,10 +125,26 @@ func apply_knockback(direction: Vector2, distance: int) -> void:
 		if results.size() > 0:
 			# Landed on Water/Wall! Bounce back to safety.
 			print("Player landed on water, returning...")
-			var return_tween = create_tween()
-			return_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-			return_tween.tween_property(self, "position", start_pos, 0.3)
-			return_tween.tween_callback(func(): is_moving = false)
+			if movement_tween: movement_tween.kill()
+			movement_tween = create_tween()
+			movement_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+			movement_tween.tween_property(self, "position", start_pos, 0.3)
+			movement_tween.tween_callback(func(): is_moving = false)
 		else:
 			is_moving = false
 	)
+
+# ------------------------------------------------------------------------------
+# BOX INTERACTION
+# ------------------------------------------------------------------------------
+func carried_by_box(target_pos: Vector2, duration: float) -> void:
+	# Override any existing movement (including knockback)
+	if movement_tween: movement_tween.kill()
+	is_moving = true
+	
+	movement_tween = create_tween()
+	movement_tween.set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+	movement_tween.tween_property(self, "global_position", target_pos, duration)
+	
+	# Assuming box handles safety (it's a bridge), so we just finish
+	movement_tween.tween_callback(func(): is_moving = false)

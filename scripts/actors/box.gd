@@ -112,6 +112,19 @@ func apply_knockback(dir: Vector2, max_dist: int) -> void:
 	if target_pos != global_position and is_floating:
 		restore_water()
 
+	# Check if Player is on top of us and move them too
+	var p_query = PhysicsPointQueryParameters2D.new()
+	p_query.position = global_position
+	p_query.collision_mask = 0xFFFFFFFF # Check everything
+	p_query.collide_with_bodies = true
+	
+	var p_results = space_state.intersect_point(p_query)
+	for result in p_results:
+		var col = result.collider
+		# If the collider is the player (checks via method presence), move them
+		if col.has_method("carried_by_box"):
+			col.carried_by_box(target_pos, 0.4)
+
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 	tween.tween_property(self, "global_position", target_pos, 0.4)
