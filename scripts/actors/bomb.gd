@@ -3,12 +3,16 @@ extends StaticBody2D
 # Matches the 'wall_layer' in your player script (Layer 2)
 @export_flags_2d_physics var water_layer: int = 2 
 
-# FIX: Add a variable to specify which TileMap layer the water is on.
 # Usually Layer 0 is Floor, and Layer 1 is Walls/Water.
 @export var tile_map_layer: int = 1
 
 func _ready() -> void:
 	add_to_group("box")
+
+func explode() -> void:
+	print("Bomb exploded! (Physics not implemented)")
+	# Trigger visual effects here later
+	queue_free()
 
 func check_on_water() -> void:
 	# Create a point query to check exactly what is under the box

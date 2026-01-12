@@ -2,10 +2,13 @@ extends Node2D
 
 @export var bomb_scene: PackedScene
 @export var tile_size: int = 16
+@export var max_bombs: int = 1 # Cap for existing bombs
 
 # We need a dedicated raycast for placing to avoid messing with the player's movement ray
 var ray: RayCast2D
 var facing_direction: Vector2 = Vector2.DOWN
+
+var active_bombs: Array[Node] = [] # Track placed bombs
 
 func _ready() -> void:
 	# Create a RayCast2D dynamically for this component
@@ -14,8 +17,15 @@ func _ready() -> void:
 	add_child(ray)
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_Z:
-		try_place_bomb()
+	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_Z:
+			if active_bombs.size() < max_bombs:
+				try_place_bomb()
+			else:
+				print("Bomb limit reached!")
+		
+		elif event.keycode == KEY_X:
+			explode_all_bombs()
 
 func update_direction(new_dir: Vector2) -> void:
 	facing_direction = new_dir
@@ -51,12 +61,37 @@ func spawn_bomb() -> void:
 	var target_pos = global_position + (facing_direction * tile_size)
 	new_bomb.global_position = target_pos
 	
+	# Track the bomb
+	active_bombs.append(new_bomb)
+	
+	# Listen for when the bomb is removed (exploded or deleted) to update our count
+	new_bomb.tree_exiting.connect(_on_bomb_removed.bind(new_bomb))
+	
 	# Add to the Level (Player's parent) so it doesn't move attached to the player
 	get_parent().get_parent().add_child(new_bomb)
+	
+	# Update indicator immediately
+	queue_redraw()
+
+func explode_all_bombs() -> void:
+	for bomb in active_bombs:
+		if is_instance_valid(bomb) and bomb.has_method("explode"):
+			bomb.explode()
+	# The list will clear itself via the _on_bomb_removed signal connection
+
+func _on_bomb_removed(bomb: Node) -> void:
+	if bomb in active_bombs:
+		active_bombs.erase(bomb)
+		queue_redraw()
 
 func _draw() -> void:
-	# Draw the red indicator square
+	# VISUAL INDICATOR
+	# Red = Ready to place
+	# Gray = Limit reached
 	var color = Color(1, 0, 0, 0.4)
+	if active_bombs.size() >= max_bombs:
+		color = Color(0.2, 0.2, 0.2, 0.4)
+		
 	var size = Vector2(tile_size, tile_size)
 	
 	# Offset to draw centered relative to the direction
