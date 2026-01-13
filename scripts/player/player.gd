@@ -10,6 +10,7 @@ extends Node2D
 
 @onready var ray: RayCast2D = $RayCast2D
 @onready var bomb_placer: Node2D = $BombPlacer 
+@onready var history_manager: Node = $HistoryManager # Ensure you add this Child Node!
 
 var is_moving: bool = false
 var input_buffer: Vector2 = Vector2.ZERO 
@@ -22,10 +23,28 @@ var inputs: Dictionary = {
 	"ui_down": Vector2.DOWN
 }
 
+func _ready() -> void:
+	add_to_group("revertable")
+
 func _unhandled_input(event: InputEvent) -> void:
+	# UTILITY INPUTS
+	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_R:
+			reset_level()
+		elif event.keycode == KEY_BACKSPACE:
+			if history_manager:
+				history_manager.undo_last_action()
+
+	# MOVEMENT INPUTS
 	for dir in inputs.keys():
 		if event.is_action_pressed(dir):
+			# Record state before moving
+			if history_manager:
+				history_manager.record_snapshot()
 			attempt_move(inputs[dir])
+
+func reset_level() -> void:
+	get_tree().reload_current_scene()
 
 func attempt_move(direction: Vector2) -> void:
 	if bomb_placer:
@@ -34,6 +53,7 @@ func attempt_move(direction: Vector2) -> void:
 	if is_moving:
 		input_buffer = direction
 		return
+	
 	move(direction)
 
 func move(direction: Vector2) -> void:
@@ -92,17 +112,22 @@ func _on_move_finished() -> void:
 	if input_buffer != Vector2.ZERO:
 		var next_move = input_buffer
 		input_buffer = Vector2.ZERO
+		# Note: Snapshot handled in _unhandled_input for next move
 		attempt_move(next_move)
 
+# Triggered by BombPlacer input
+func trigger_explosion_sequence() -> void:
+	if is_moving: return
+	bomb_placer.actual_explode_logic()
+
 # ------------------------------------------------------------------------------
-# EXPLOSION KNOCKBACK
+# KNOCKBACK LOGIC
 # ------------------------------------------------------------------------------
 func apply_knockback(direction: Vector2, distance: int) -> void:
 	if is_moving: return
 	is_moving = true
 	
 	var start_pos = position
-	# We assume explosion force sends player flying OVER walls/water
 	var target_pos = position + (direction * tile_size * distance)
 	
 	if movement_tween: movement_tween.kill()
@@ -116,14 +141,13 @@ func apply_knockback(direction: Vector2, distance: int) -> void:
 		var space_state = get_world_2d().direct_space_state
 		var query = PhysicsPointQueryParameters2D.new()
 		query.position = global_position
-		query.collision_mask = wall_layer # Layer 2
+		query.collision_mask = wall_layer 
 		query.collide_with_areas = true
 		query.collide_with_bodies = true
 		
 		var results = space_state.intersect_point(query)
 		
 		if results.size() > 0:
-			# Landed on Water/Wall! Bounce back to safety.
 			print("Player landed on water, returning...")
 			if movement_tween: movement_tween.kill()
 			movement_tween = create_tween()
@@ -148,3 +172,10 @@ func carried_by_box(target_pos: Vector2, duration: float) -> void:
 	
 	# Assuming box handles safety (it's a bridge), so we just finish
 	movement_tween.tween_callback(func(): is_moving = false)
+func record_data() -> Dictionary:
+	return {
+		"position": position
+	}
+
+func restore_data(data: Dictionary) -> void:
+	position = data.position
