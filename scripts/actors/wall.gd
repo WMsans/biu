@@ -18,6 +18,11 @@ func _ready() -> void:
 	_initial_layer = collision_layer
 	_initial_mask = collision_mask
 
+# NEW: Handle LDtk field imports specifically for this object
+func import_ldtk_fields(fields: Dictionary) -> void:
+	if "recover_time" in fields:
+		recover_time = fields.recover_time
+
 # Interface called by Bomb.gd when exploded
 # We ignore direction/force and simply destroy the wall
 func apply_knockback(_direction: Vector2, _force: int) -> void:

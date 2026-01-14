@@ -20,9 +20,9 @@ func post_import(entity_layer: LDTKEntityLayer) -> LDTKEntityLayer:
 				var new_node = packed_scene.instantiate()
 				new_node.position = entity.position
 				
-				# Check if the node has the variable 'recover_time'
-				if "recover_time" in new_node:
-					new_node.recover_time = entity.fields.recover_time
+				# REFACTORED: Delegate field import to the object itself
+				if new_node.has_method("import_ldtk_fields"):
+					new_node.import_ldtk_fields(entity.fields)
 
 				entity_layer.add_child(new_node)
 				new_node.owner = scene_root
