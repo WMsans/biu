@@ -15,6 +15,9 @@ var is_moving: bool = false
 var input_buffer: Vector2 = Vector2.ZERO 
 var movement_tween: Tween # Track the active tween to allow cancelling
 
+# NEW: Track the target position to ensure we save grid-aligned coordinates
+var _target_pos: Vector2
+
 var inputs: Dictionary = {
 	"ui_right": Vector2.RIGHT,
 	"ui_left": Vector2.LEFT,
@@ -24,6 +27,7 @@ var inputs: Dictionary = {
 
 func _ready() -> void:
 	add_to_group("revertable")
+	_target_pos = position # Initialize with current position
 
 func _unhandled_input(event: InputEvent) -> void:
 	# UTILITY INPUTS
@@ -110,6 +114,7 @@ func push_box(box: Node2D, direction: Vector2) -> void:
 
 func move_player(target_pos: Vector2) -> void:
 	is_moving = true
+	_target_pos = target_pos # Update intended target
 	
 	if movement_tween: movement_tween.kill()
 	movement_tween = create_tween()
@@ -139,6 +144,7 @@ func apply_knockback(direction: Vector2, distance: int) -> void:
 	
 	var start_pos = position
 	var target_pos = position + (direction * tile_size * distance)
+	_target_pos = target_pos # Update intended target
 	
 	if movement_tween: movement_tween.kill()
 	movement_tween = create_tween()
@@ -166,6 +172,7 @@ func apply_knockback(direction: Vector2, distance: int) -> void:
 		# Trigger respawn if on Water OR in Void
 		if results.size() > 0 or is_in_void:
 			print("Player landed on hazard (Water/Void), returning...")
+			# Note: We don't revert _target_pos here because this is a transient animation
 			if movement_tween: movement_tween.kill()
 			movement_tween = create_tween()
 			movement_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
@@ -182,6 +189,7 @@ func carried_by_box(target_pos: Vector2, duration: float) -> void:
 	# Override any existing movement (including knockback)
 	if movement_tween: movement_tween.kill()
 	is_moving = true
+	_target_pos = target_pos # Update intended target
 	
 	movement_tween = create_tween()
 	movement_tween.set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
@@ -192,8 +200,10 @@ func carried_by_box(target_pos: Vector2, duration: float) -> void:
 
 func record_data() -> Dictionary:
 	return {
-		"position": position
+		# If moving, save the destination, otherwise the current position
+		"position": _target_pos if is_moving else position
 	}
 
 func restore_data(data: Dictionary) -> void:
 	position = data.position
+	_target_pos = data.position # Sync target pos
