@@ -113,7 +113,12 @@ func can_push_box(box: Node2D, direction: Vector2) -> bool:
 	return not is_blocked
 
 func push_box(box: Node2D, direction: Vector2) -> void:
-	var box_target = box.position + (direction * tile_size)
+	# This prevents floating point drift or "overshoot" values from accumulating.
+	var start_pos = box.position.snapped(Vector2(tile_size, tile_size)) - Vector2(tile_size, tile_size) / 2
+	
+	# Calculate target based on the clean, snapped position
+	var box_target = start_pos + (direction * tile_size)
+	
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tween.tween_property(box, "position", box_target, move_speed)
