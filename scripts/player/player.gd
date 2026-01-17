@@ -3,6 +3,7 @@ extends Node2D
 # SETTINGS
 @export var tile_size: int = 16
 @export var move_speed: float = 0.12 
+@export var death_effect_scene: PackedScene
 
 # COLLISION MASKS
 @export_flags_2d_physics var wall_layer: int = 2 
@@ -40,6 +41,17 @@ func _ready() -> void:
 		default_scale = sprite.scale
 	else:
 		default_scale = scale
+	
+	# Matches BombPlacer's default 'facing_direction = Vector2.DOWN'
+	var initial_dir = Vector2.DOWN
+	
+	if bomb_placer:
+		bomb_placer.update_direction(initial_dir)
+	
+	if sprite:
+		# Apply the same rotation logic as 'attempt_move'
+		# Assumes sprite texture faces UP (Rotation 0 = UP)
+		sprite.rotation = initial_dir.angle() + PI/2
 
 func _unhandled_input(event: InputEvent) -> void:
 	# UTILITY INPUTS
@@ -256,14 +268,10 @@ func apply_knockback(direction: Vector2, distance: int) -> void:
 			if not camera.is_point_in_level(global_position):
 				is_in_void = true
 		
+		# CHECK FOR HAZARDS
 		if results.size() > 0 or is_in_void:
-			print("Player landed on hazard. Resetting...")
-			if movement_tween: movement_tween.kill()
-			is_moving = false
-			is_knockback_active = false
-			has_pending_level_entry = false 
-			if history_manager:
-				history_manager.load_checkpoint()
+			print("Player died. Starting sequence...")
+			die() 
 		else:
 			is_moving = false
 			is_knockback_active = false
@@ -341,3 +349,48 @@ func restore_data(data: Dictionary) -> void:
 	
 	position = data.position
 	_target_pos = data.position
+
+func die() -> void:
+	# 1. Disable Input and Physics
+	set_process_unhandled_input(false)
+	set_physics_process(false)
+	is_moving = false
+	if movement_tween: movement_tween.kill()
+	
+	# 2. Hide Player Visuals
+	if sprite:
+		sprite.visible = false
+	
+	# 3. Spawn Death Particles
+	# We spawn them in the parent (Level) so they don't move with the player during reset
+	if death_effect_scene:
+		var effect = death_effect_scene.instantiate()
+		effect.global_position = global_position
+		get_parent().add_child(effect)
+	
+	# 4. Wait a moment (Freeze frame / impact feel)
+	await get_tree().create_timer(0.1).timeout
+	
+	# 5. Transition Out (Fade to Black)
+	# Assuming TransitionLayer is an Autoload. If not, you can reference it differently.
+	if has_node("/root/TransitionLayer"):
+		await get_node("/root/TransitionLayer").fade_out(0.4)
+	else:
+		# Fallback if no transition screen exists
+		await get_tree().create_timer(0.4).timeout
+	
+	# 6. Load Checkpoint (Respawn Logic)
+	if history_manager:
+		history_manager.load_checkpoint()
+	
+	# 7. Restore Player State
+	if sprite:
+		sprite.visible = true
+		sprite.scale = default_scale # Reset any jelly deformation
+		
+	set_process_unhandled_input(true)
+	set_physics_process(true)
+	
+	# 8. Transition In (Fade to Game)
+	if has_node("/root/TransitionLayer"):
+		get_node("/root/TransitionLayer").fade_in(0.3)
