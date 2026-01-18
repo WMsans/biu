@@ -3,7 +3,9 @@ extends StaticBody2D
 
 # Default recovery time, overwritten by LDtk import
 @export var recover_time: float = 1.0
-@export var tile_size: int = 16 # Added tile_size to match other actors like Bomb
+@export var tile_size: int = 16 
+
+@export var death_effect_scene: PackedScene
 
 # Store initial layers to restore them later
 var _initial_layer: int
@@ -20,19 +22,23 @@ func _ready() -> void:
 	_initial_layer = collision_layer
 	_initial_mask = collision_mask
 
-# NEW: Handle LDtk field imports specifically for this object
 func import_ldtk_fields(fields: Dictionary) -> void:
 	if "recover_time" in fields:
 		recover_time = fields.recover_time
 
 # Interface called by Bomb.gd when exploded
-# We ignore direction/force and simply destroy the wall
 func apply_knockback(_direction: Vector2, _force: int) -> void:
 	destroy()
 
 func destroy() -> void:
 	# Prevent multiple destruction calls
 	if not visible: return
+
+	# We add it to the parent so it remains visible even after the wall hides
+	if death_effect_scene:
+		var effect = death_effect_scene.instantiate()
+		effect.global_position = global_position
+		get_tree().get_root().add_child(effect)
 
 	print("Wall destroyed! Recovering in %s seconds." % recover_time)
 	
