@@ -50,7 +50,11 @@ func start(duration: float) -> void:
 		tween.tween_property(dot, "scale", scale_active, 0.5).set_delay(delay)
 		tween.tween_property(dot, "modulate", color_active, 0.5).set_delay(delay)
 
-	# Cleanup the clock after the wall has recovered
-	# Adding a small buffer to ensure the last animation finishes
-	await get_tree().create_timer(duration + 1.0).timeout
+	await get_tree().create_timer(duration).timeout
+	
+	var exit_tween = create_tween()
+	exit_tween.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	exit_tween.tween_property(self, "scale", Vector2.ZERO, 0.3)
+	
+	await exit_tween.finished
 	queue_free()

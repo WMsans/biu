@@ -11,6 +11,8 @@ extends StaticBody2D
 # Store initial layers to restore them later
 var _initial_layer: int
 var _initial_mask: int
+# [NEW] Store initial scale to handle LDTK resizing correctly
+var _initial_scale: Vector2
 
 func _ready() -> void:
 	add_to_group("wall")
@@ -22,6 +24,9 @@ func _ready() -> void:
 	
 	_initial_layer = collision_layer
 	_initial_mask = collision_mask
+	
+	# [NEW] Capture the scale set by LevelEntityMapper before we modify it
+	_initial_scale = scale
 
 func import_ldtk_fields(fields: Dictionary) -> void:
 	if "recover_time" in fields:
@@ -49,13 +54,13 @@ func destroy() -> void:
 		get_parent().add_child(clock)
 		
 		# Center the clock on the wall. 
-		# If the wall's pivot is Top-Left, add half tile_size. 
+		# If the wall's pivot is Top-Left, add half tile_size.
 		# If pivot is Center, just use global_position.
 		# Based on death_effect using global_position directly, we use that here.
 		clock.global_position = global_position 
 		
 		if clock.has_method("start"):
-			clock.start(recover_time)
+			clock.start(recover_time - 0.1)
 
 	print("Wall destroyed! Recovering in %s seconds." % recover_time)
 	
@@ -98,3 +103,9 @@ func _on_recover_timeout() -> void:
 	print("Wall recovering...")
 	visible = true
 	collision_layer = _initial_layer
+	
+	# [NEW] Bounce Animation: Start at zero and spring back to initial size
+	scale = Vector2.ZERO
+	var tween = create_tween()
+	tween.set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+	tween.tween_property(self, "scale", _initial_scale, 0.6)

@@ -4,5 +4,6 @@
 
 [node name="RecoveryClock" type="Node2D"]
 script = ExtResource("1_pktbb")
+dot_count = 12
 color_inactive = Color(1, 0.67065626, 0.64150834, 1)
 color_active = Color(0.7024058, 1, 0.6825535, 1)
