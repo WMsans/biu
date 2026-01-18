@@ -4103,7 +4103,7 @@
 							"height": 16,
 							"defUid": 287,
 							"px": [152,72],
-							"fieldInstances": [{ "__identifier": "recover_time", "__type": "Float", "__value": 0.1, "__tile": null, "defUid": 288, "realEditorValues": [] }],
+							"fieldInstances": [{ "__identifier": "recover_time", "__type": "Float", "__value": 3, "__tile": null, "defUid": 288, "realEditorValues": [{ "id": "V_Float", "params": [3] }] }],
 							"__worldX": 760,
 							"__worldY": 1032
 						},
@@ -4119,7 +4119,7 @@
 							"height": 16,
 							"defUid": 287,
 							"px": [152,88],
-							"fieldInstances": [{ "__identifier": "recover_time", "__type": "Float", "__value": 0.1, "__tile": null, "defUid": 288, "realEditorValues": [] }],
+							"fieldInstances": [{ "__identifier": "recover_time", "__type": "Float", "__value": 3, "__tile": null, "defUid": 288, "realEditorValues": [{ "id": "V_Float", "params": [3] }] }],
 							"__worldX": 760,
 							"__worldY": 1048
 						},
@@ -4135,7 +4135,7 @@
 							"height": 16,
 							"defUid": 287,
 							"px": [168,72],
-							"fieldInstances": [{ "__identifier": "recover_time", "__type": "Float", "__value": 0.1, "__tile": null, "defUid": 288, "realEditorValues": [] }],
+							"fieldInstances": [{ "__identifier": "recover_time", "__type": "Float", "__value": 3, "__tile": null, "defUid": 288, "realEditorValues": [{ "id": "V_Float", "params": [3] }] }],
 							"__worldX": 776,
 							"__worldY": 1032
 						},
@@ -4151,7 +4151,7 @@
 							"height": 16,
 							"defUid": 287,
 							"px": [168,88],
-							"fieldInstances": [{ "__identifier": "recover_time", "__type": "Float", "__value": 0.1, "__tile": null, "defUid": 288, "realEditorValues": [] }],
+							"fieldInstances": [{ "__identifier": "recover_time", "__type": "Float", "__value": 3, "__tile": null, "defUid": 288, "realEditorValues": [{ "id": "V_Float", "params": [3] }] }],
 							"__worldX": 776,
 							"__worldY": 1048
 						},
@@ -4167,7 +4167,7 @@
 							"height": 16,
 							"defUid": 287,
 							"px": [184,72],
-							"fieldInstances": [{ "__identifier": "recover_time", "__type": "Float", "__value": 0.1, "__tile": null, "defUid": 288, "realEditorValues": [] }],
+							"fieldInstances": [{ "__identifier": "recover_time", "__type": "Float", "__value": 3, "__tile": null, "defUid": 288, "realEditorValues": [{ "id": "V_Float", "params": [3] }] }],
 							"__worldX": 792,
 							"__worldY": 1032
 						},
@@ -4183,7 +4183,7 @@
 							"height": 16,
 							"defUid": 287,
 							"px": [184,88],
-							"fieldInstances": [{ "__identifier": "recover_time", "__type": "Float", "__value": 0.1, "__tile": null, "defUid": 288, "realEditorValues": [] }],
+							"fieldInstances": [{ "__identifier": "recover_time", "__type": "Float", "__value": 3, "__tile": null, "defUid": 288, "realEditorValues": [{ "id": "V_Float", "params": [3] }] }],
 							"__worldX": 792,
 							"__worldY": 1048
 						},
@@ -4199,7 +4199,7 @@
 							"height": 16,
 							"defUid": 287,
 							"px": [200,72],
-							"fieldInstances": [{ "__identifier": "recover_time", "__type": "Float", "__value": 0.1, "__tile": null, "defUid": 288, "realEditorValues": [] }],
+							"fieldInstances": [{ "__identifier": "recover_time", "__type": "Float", "__value": 3, "__tile": null, "defUid": 288, "realEditorValues": [{ "id": "V_Float", "params": [3] }] }],
 							"__worldX": 808,
 							"__worldY": 1032
 						},
@@ -4215,7 +4215,7 @@
 							"height": 16,
 							"defUid": 287,
 							"px": [200,88],
-							"fieldInstances": [{ "__identifier": "recover_time", "__type": "Float", "__value": 0.1, "__tile": null, "defUid": 288, "realEditorValues": [] }],
+							"fieldInstances": [{ "__identifier": "recover_time", "__type": "Float", "__value": 3, "__tile": null, "defUid": 288, "realEditorValues": [{ "id": "V_Float", "params": [3] }] }],
 							"__worldX": 808,
 							"__worldY": 1048
 						}
