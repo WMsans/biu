@@ -43,7 +43,6 @@ debug_draw = false
 
 [node name="AmbientParticles" parent="." instance=ExtResource("1_ajgsl")]
 particle_count = 40
-base_color = Color(1.7276214, 1.5266454, 2.454227, 0.39215687)
 min_lifespan = 6.0
 max_lifespan = 12.0
 
