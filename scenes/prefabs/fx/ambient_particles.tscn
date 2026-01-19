@@ -113,3 +113,4 @@ func _animate_particle(p: Sprite2D) -> void:
 
 [node name="AmbientParticles" type="Parallax2D"]
 script = SubResource("GDScript_lgrss")
+base_color = Color(0, 0.87556374, 0.69938695, 0.4)

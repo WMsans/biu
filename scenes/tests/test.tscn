@@ -27,7 +27,7 @@ visible = false
 [node name="biu_world" parent="." instance=ExtResource("1_8cg7g")]
 
 [node name="Player" parent="." instance=ExtResource("2_syyn5")]
-position = Vector2(488, 824)
+position = Vector2(808, -72)
 
 [node name="Camera2D" type="Camera2D" parent="." node_paths=PackedStringArray("player", "levels_parent")]
 position = Vector2(144, 80)
@@ -43,7 +43,6 @@ debug_draw = false
 
 [node name="AmbientParticles" parent="." instance=ExtResource("1_ajgsl")]
 particle_count = 40
-base_color = Color(1.7276214, 1.5266454, 2.454227, 0.39215687)
 min_lifespan = 6.0
 max_lifespan = 12.0
 
