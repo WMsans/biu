@@ -505,7 +505,7 @@ func die() -> void:
 	
 	# 6. Load Checkpoint (Respawn Logic)
 	if history_manager:
-		history_manager.load_checkpoint()
+		history_manager.undo_last_action()
 	
 	# 7. Restore Player State
 	if sprite:
