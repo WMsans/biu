@@ -10,6 +10,7 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_r053x"]
 shader = ExtResource("3_6v0jn")
+shader_parameter/enabled = true
 shader_parameter/line_color = Color(1, 1, 1, 0.5)
 shader_parameter/line_thickness = 1.0000000475
 
@@ -55,3 +56,5 @@ max_history = 500
 energy = 0.5
 shadow_enabled = true
 texture = SubResource("GradientTexture2D_6o77n")
+
+[node name="FmodListener2D" type="FmodListener2D" parent="."]
