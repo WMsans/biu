@@ -2,13 +2,13 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://c87jcmoy4hxvf"
-path="res://.godot/imported/explode.wav-95cce01c70242fa5ba59a820ddeb687e.sample"
+uid="uid://cho2s1isn0qv1"
+path="res://.godot/imported/wallbreak.wav-1b73e961698e057f6a54ba0a75c85d9d.sample"
 
 [deps]
 
-source_file="res://fmod/biu/Assets/explode.wav"
-dest_files=["res://.godot/imported/explode.wav-95cce01c70242fa5ba59a820ddeb687e.sample"]
+source_file="res://fmod/biu/Assets/wallbreak.wav"
+dest_files=["res://.godot/imported/wallbreak.wav-1b73e961698e057f6a54ba0a75c85d9d.sample"]
 
 [params]
 

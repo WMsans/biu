@@ -17,6 +17,9 @@ glow_bloom = 0.3
 
 [node name="Test" type="Node2D"]
 
+[node name="FmodBankLoader" type="FmodBankLoader" parent="."]
+bank_paths = ["res://fmod/biu/Build/Desktop/Master.strings.bank", "res://fmod/biu/Build/Desktop/Master.bank"]
+
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("1_weoh1")]
@@ -47,6 +50,3 @@ max_lifespan = 12.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_ajgsl")
-
-[node name="FmodBankLoader" type="FmodBankLoader" parent="."]
-bank_paths = ["res://fmod/biu/Build/Desktop/Master.bank"]

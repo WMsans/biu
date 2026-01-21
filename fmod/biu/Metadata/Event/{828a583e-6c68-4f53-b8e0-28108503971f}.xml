@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.03.00">
 	<object class="Event" id="{828a583e-6c68-4f53-b8e0-28108503971f}">
 		<property name="name">
-			<value>BoxBreak</value>
+			<value>WallBreak</value>
 		</property>
 		<property name="outputFormat">
 			<value>1</value>
@@ -91,7 +91,7 @@
 	</object>
 	<object class="MultiSound" id="{481a77a9-6ec0-4ded-8ae1-bd0c1f772fbb}">
 		<relationship name="sounds">
-			<destination>{ce0ed869-e908-4f47-b3ce-5cacd823810f}</destination>
+			<destination>{4fa5bfe6-247c-4b7a-b8ad-93a7f905fdf1}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusEffectChain" id="{f15f6c74-7d1f-4700-b99a-c20a15a24afd}">
@@ -106,12 +106,12 @@
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{52a39d30-af03-43cd-acac-68df5fcd06b7}" />
-	<object class="SingleSound" id="{ce0ed869-e908-4f47-b3ce-5cacd823810f}">
+	<object class="SingleSound" id="{4fa5bfe6-247c-4b7a-b8ad-93a7f905fdf1}">
 		<property name="volume">
-			<value>-8</value>
+			<value>-6.5</value>
 		</property>
 		<relationship name="audioFile">
-			<destination>{ab5efee0-4efe-46a0-bf5c-8d27a27c8b06}</destination>
+			<destination>{57d49d27-9f3a-4e3f-9ccf-77adf47ab958}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusFader" id="{33b4ff19-94bd-4cf0-91b3-f0f58f3aa4f7}" />

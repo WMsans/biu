@@ -3,6 +3,5 @@
 /android/
 build/
 # Fmod
-fmod/
 fmod/biu/.cache/
 fmod/biu/.user/
