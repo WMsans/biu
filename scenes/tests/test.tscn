@@ -18,7 +18,7 @@ glow_bloom = 0.3
 [node name="Test" type="Node2D"]
 
 [node name="FmodBankLoader" type="FmodBankLoader" parent="."]
-bank_paths = ["res://fmod/biu/Build/Desktop/Master.strings.bank", "res://fmod/biu/Build/Desktop/Master.bank"]
+bank_paths = ["res://fmod/biu/Build/Desktop/Master.strings.bank", "res://fmod/biu/Build/Desktop/Master.bank", "res://fmod/biu/Build/Desktop/Actors.bank", "res://fmod/biu/Build/Desktop/Player.bank"]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

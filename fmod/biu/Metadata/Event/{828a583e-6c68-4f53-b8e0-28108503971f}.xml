@@ -5,7 +5,7 @@
 			<value>WallBreak</value>
 		</property>
 		<property name="outputFormat">
-			<value>1</value>
+			<value>2</value>
 		</property>
 		<relationship name="folder">
 			<destination>{6740a9ad-8824-4481-a316-e742158d9a99}</destination>
@@ -32,7 +32,7 @@
 			<destination>{85b58a50-7b2f-4ba6-b537-973d95b6373a}</destination>
 		</relationship>
 		<relationship name="banks">
-			<destination>{13b23e12-e680-4dd2-9df4-120ca8b0c724}</destination>
+			<destination>{f5b1e0f2-ada3-4011-bec1-4785fce9eda7}</destination>
 		</relationship>
 	</object>
 	<object class="EventMixer" id="{a218d453-3ba1-4be9-899e-64b2e37144a6}">
@@ -65,6 +65,9 @@
 		</property>
 		<property name="voiceStealing">
 			<value>2</value>
+		</property>
+		<property name="maximumDistance">
+			<value>200</value>
 		</property>
 	</object>
 	<object class="MarkerTrack" id="{4c333e07-5015-4475-baa6-e40b3f0dbdf6}" />
@@ -103,6 +106,8 @@
 	<object class="MixerBusEffectChain" id="{6c8a0aaf-e84b-4eb6-8a92-27bdab9ab25c}">
 		<relationship name="effects">
 			<destination>{2bc1f2a2-d28d-4848-a87f-3aab4552d9e6}</destination>
+			<destination>{3cf59bec-305c-4f87-aac3-98686d1afa3a}</destination>
+			<destination>{61d523ae-2038-4692-bccf-34d8621dbad5}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{52a39d30-af03-43cd-acac-68df5fcd06b7}" />
@@ -116,4 +121,13 @@
 	</object>
 	<object class="MixerBusFader" id="{33b4ff19-94bd-4cf0-91b3-f0f58f3aa4f7}" />
 	<object class="MixerBusFader" id="{2bc1f2a2-d28d-4848-a87f-3aab4552d9e6}" />
+	<object class="SFXReverbEffect" id="{3cf59bec-305c-4f87-aac3-98686d1afa3a}" />
+	<object class="SpatialiserEffect" id="{61d523ae-2038-4692-bccf-34d8621dbad5}">
+		<property name="maximumDistance">
+			<value>50</value>
+		</property>
+		<property name="panBlend">
+			<value>0.604999959</value>
+		</property>
+	</object>
 </objects>

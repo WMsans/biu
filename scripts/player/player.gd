@@ -12,9 +12,8 @@ extends CharacterBody2D
 @onready var ray: RayCast2D = $RayCast2D
 @onready var bomb_placer: Node2D = $BombPlacer 
 @onready var history_manager: Node = $HistoryManager
-# REFERENCE TO THE VISUAL SPRITE
-# Ensure you have a child node named "Sprite" (or "Sprite2D") for this to work.
 @onready var sprite: Node2D = $Sprite2D
+@onready var walk_sound_emitter: FmodEventEmitter2D = $WalkSoundEmitter
 
 var is_moving: bool = false
 var input_buffer: Vector2 = Vector2.ZERO 
@@ -216,6 +215,8 @@ func push_box(box: Node2D, direction: Vector2) -> void:
 func move_player(target_pos: Vector2, start_delay: float = 0.0) -> void:
 	is_moving = true
 	_target_pos = target_pos 
+	
+	walk_sound_emitter.play()
 	
 	# TRIGGER JELLY ANIMATION
 	_animate_jelly(move_speed + 0.04)

@@ -9,7 +9,9 @@ extends Node2D
 @export var sound_prefab: PackedScene 
 
 func _ready() -> void:
-	get_tree().get_root().add_child(sound_prefab.instantiate())
+	var sound = sound_prefab.instantiate()
+	sound.global_position = global_position
+	get_tree().get_root().add_child(sound)
 	# The parent layer might be at Z-Index -50, so we disable relative Z to break out.
 	z_as_relative = false
 	z_index = 100

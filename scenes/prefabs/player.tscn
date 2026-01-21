@@ -58,3 +58,7 @@ shadow_enabled = true
 texture = SubResource("GradientTexture2D_6o77n")
 
 [node name="FmodListener2D" type="FmodListener2D" parent="."]
+
+[node name="WalkSoundEmitter" type="FmodEventEmitter2D" parent="."]
+event_name = "event:/Walk"
+event_guid = "{2f7ecb69-9b53-4e06-814b-5a658ef6bbf2}"
