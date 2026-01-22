@@ -50,7 +50,7 @@ func destroy() -> void:
 	if recovery_clock_scene:
 		var clock = recovery_clock_scene.instantiate()
 		# Add to parent (Level) instead of root, so it moves with the level if needed
-		# and stays organized.
+		# and stays organized
 		get_parent().add_child(clock)
 		
 		# Center the clock on the wall. 
@@ -95,8 +95,14 @@ func _propagate_destruction() -> void:
 			# If we find a valid neighbor wall that hasn't been destroyed yet
 			if is_instance_valid(collider) and collider != self:
 				if collider.is_in_group("wall") and collider.has_method("destroy"):
-					# This will call destroy(), which checks 'visible' to prevent infinite loops
-					collider.destroy()
+					if collider.visible:
+						# This creates the "domino" or wave effect
+						var timer = get_tree().create_timer(0.05)
+						timer.timeout.connect(func():
+							# Double check validity in case it was destroyed by another source
+							if is_instance_valid(collider):
+								collider.destroy()
+						)
 
 func _on_recover_timeout() -> void:
 	# Recover the wall
