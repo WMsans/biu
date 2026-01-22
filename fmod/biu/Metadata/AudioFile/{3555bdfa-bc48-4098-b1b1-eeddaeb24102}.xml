@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="AudioFile" id="{3555bdfa-bc48-4098-b1b1-eeddaeb24102}">
+		<property name="assetPath">
+			<value>explosion02.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>1</value>
+		</property>
+		<property name="length">
+			<value>2.850702947845805</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{83817c38-4025-4766-a1ee-c9bf983bd676}</destination>
+		</relationship>
+	</object>
+</objects>

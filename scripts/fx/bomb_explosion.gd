@@ -5,7 +5,12 @@ extends Node2D
 @export var duration: float = 0.6 # Slightly faster than player death
 @export var particle_color: Color = Color.WHITE # You can change this to Orange/Red in the Inspector
 
+@export var sound_prefab: PackedScene
+
 func _ready() -> void:
+	var sound = sound_prefab.instantiate()
+	sound.global_position = global_position
+	get_tree().get_root().add_child(sound)
 	# 1. Create Texture (Same as death_explosion.gd)
 	var img = Image.create(8, 8, false, Image.FORMAT_RGBA8)
 	img.fill(Color(0, 0, 0, 0)) 
