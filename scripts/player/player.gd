@@ -4,7 +4,8 @@ extends CharacterBody2D
 @export var tile_size: int = 16
 @export var move_speed: float = 0.12 
 @export var death_effect_scene: PackedScene
-@export var player_respawn_sound: PackedScene # [NEW] Added export for respawn sound
+@export var player_respawn_sound: PackedScene
+@export var player_pushed_sound: PackedScene
 
 # COLLISION MASKS
 @export_flags_2d_physics var wall_layer: int = 2 
@@ -249,6 +250,12 @@ func trigger_explosion_sequence() -> void:
 func apply_knockback(direction: Vector2, distance: int) -> void:
 	if is_moving: return
 	is_moving = true
+	
+	# [NEW] SPAWN PUSHED SOUND
+	if player_pushed_sound:
+		var sound_instance = player_pushed_sound.instantiate()
+		get_parent().add_child(sound_instance)
+		sound_instance.global_position = global_position
 	
 	# Enable Knockback Protection Flags
 	is_knockback_active = true
