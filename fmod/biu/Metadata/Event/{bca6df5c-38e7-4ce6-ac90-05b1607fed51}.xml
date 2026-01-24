@@ -101,6 +101,7 @@
 		<relationship name="effects">
 			<destination>{deaf41cf-e4d9-43dd-aa41-b63b7ed9c854}</destination>
 			<destination>{4fe20691-4b08-4994-b130-2a2303ac0810}</destination>
+			<destination>{6f98388b-899a-4130-aaa5-c3ea7e15e979}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{b98de603-a088-4e6d-9f70-4875bfab0374}" />
@@ -114,6 +115,14 @@
 	<object class="SpatialiserEffect" id="{4fe20691-4b08-4994-b130-2a2303ac0810}">
 		<property name="panBlend">
 			<value>0.099999994</value>
+		</property>
+	</object>
+	<object class="SFXReverbEffect" id="{6f98388b-899a-4130-aaa5-c3ea7e15e979}">
+		<property name="lowShelfFrequency">
+			<value>270</value>
+		</property>
+		<property name="lowShelfGain">
+			<value>-14.5</value>
 		</property>
 	</object>
 </objects>

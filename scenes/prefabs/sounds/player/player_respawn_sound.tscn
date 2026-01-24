@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://borcqpx2ksga"]
+
+[node name="WallExplosionSound" type="FmodEventEmitter2D"]
+event_name = "event:/Player/PlayerRespawn"
+event_guid = "{ddd1eba7-5568-476a-af1f-c0104406220e}"
+autoplay = true
+auto_release = true

@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://7q23vm85bjma"]
+
+[node name="WallExplosionSound" type="FmodEventEmitter2D"]
+event_name = "event:/Player/PlayerDeath"
+event_guid = "{45a439ad-2826-4a14-b0fb-79582a209e71}"
+autoplay = true
+auto_release = true

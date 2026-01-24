@@ -4,6 +4,7 @@ extends CharacterBody2D
 @export var tile_size: int = 16
 @export var move_speed: float = 0.12 
 @export var death_effect_scene: PackedScene
+@export var player_respawn_sound: PackedScene # [NEW] Added export for respawn sound
 
 # COLLISION MASKS
 @export_flags_2d_physics var wall_layer: int = 2 
@@ -512,6 +513,12 @@ func die() -> void:
 	if sprite:
 		sprite.visible = true
 		sprite.scale = default_scale
+		
+	# [NEW] SPAWN RESPAWN SOUND
+	if player_respawn_sound:
+		var sound_instance = player_respawn_sound.instantiate()
+		get_parent().add_child(sound_instance)
+		sound_instance.global_position = global_position
 		
 	set_process_unhandled_input(true)
 	set_physics_process(true)
