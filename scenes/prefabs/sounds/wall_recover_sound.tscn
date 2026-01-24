@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://bctyi7g1sn2ha"]
+
+[node name="WallExplosionSound" type="FmodEventEmitter2D"]
+event_name = "event:/Actors/Wall/WallRecover"
+event_guid = "{39f41db5-7bf0-478f-809d-514f0595ce1b}"
+autoplay = true
+auto_release = true

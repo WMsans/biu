@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://c176quklfrsuu"]
+
+[node name="WallExplosionSound" type="FmodEventEmitter2D"]
+event_name = "event:/WallBreak"
+event_guid = "{828a583e-6c68-4f53-b8e0-28108503971f}"
+autoplay = true
+auto_release = true

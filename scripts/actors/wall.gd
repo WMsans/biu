@@ -7,11 +7,11 @@ extends StaticBody2D
 
 @export var death_effect_scene: PackedScene
 @export var recovery_clock_scene: PackedScene 
+@export var wall_recover_sound: PackedScene
 
 # Store initial layers to restore them later
 var _initial_layer: int
 var _initial_mask: int
-# [NEW] Store initial scale to handle LDTK resizing correctly
 var _initial_scale: Vector2
 
 func _ready() -> void:
@@ -25,7 +25,7 @@ func _ready() -> void:
 	_initial_layer = collision_layer
 	_initial_mask = collision_mask
 	
-	# [NEW] Capture the scale set by LevelEntityMapper before we modify it
+	# Capture the scale set by LevelEntityMapper before we modify it
 	_initial_scale = scale
 
 func import_ldtk_fields(fields: Dictionary) -> void:
@@ -50,12 +50,10 @@ func destroy() -> void:
 	if recovery_clock_scene:
 		var clock = recovery_clock_scene.instantiate()
 		# Add to parent (Level) instead of root, so it moves with the level if needed
-		# and stays organized.
+		# and stays organized
 		get_parent().add_child(clock)
 		
 		# Center the clock on the wall. 
-		# If the wall's pivot is Top-Left, add half tile_size.
-		# If pivot is Center, just use global_position.
 		# Based on death_effect using global_position directly, we use that here.
 		clock.global_position = global_position 
 		
@@ -95,12 +93,25 @@ func _propagate_destruction() -> void:
 			# If we find a valid neighbor wall that hasn't been destroyed yet
 			if is_instance_valid(collider) and collider != self:
 				if collider.is_in_group("wall") and collider.has_method("destroy"):
-					# This will call destroy(), which checks 'visible' to prevent infinite loops
-					collider.destroy()
+					if collider.visible:
+						# This creates the "domino" or wave effect
+						var timer = get_tree().create_timer(0.05)
+						timer.timeout.connect(func():
+							# Double check validity in case it was destroyed by another source
+							if is_instance_valid(collider):
+								collider.destroy()
+						)
 
 func _on_recover_timeout() -> void:
 	# Recover the wall
 	print("Wall recovering...")
+	
+	# [NEW] Spawn the wall recovery sound
+	if wall_recover_sound:
+		var sound = wall_recover_sound.instantiate()
+		sound.global_position = global_position
+		get_tree().get_root().add_child(sound)
+	
 	visible = true
 	collision_layer = _initial_layer
 	

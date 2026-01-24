@@ -8,6 +8,10 @@
 
 config_version=5
 
+[Fmod]
+
+General/banks_path="res://fmod/biu/Build/Desktop"
+
 [application]
 
 config/name="biu"
@@ -18,6 +22,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 TransitionLayer="*res://scenes/gui/death_transition.tscn"
+FmodManager="*res://addons/fmod/FmodManager.gd"
 
 [display]
 
@@ -29,7 +34,7 @@ project/assembly_name="biu"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/ldtk-importer/plugin.cfg")
+enabled=PackedStringArray("res://addons/fmod/plugin.cfg", "res://addons/ldtk-importer/plugin.cfg")
 
 [global_group]
 

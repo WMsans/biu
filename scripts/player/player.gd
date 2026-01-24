@@ -4,6 +4,8 @@ extends CharacterBody2D
 @export var tile_size: int = 16
 @export var move_speed: float = 0.12 
 @export var death_effect_scene: PackedScene
+@export var player_respawn_sound: PackedScene
+@export var player_pushed_sound: PackedScene
 
 # COLLISION MASKS
 @export_flags_2d_physics var wall_layer: int = 2 
@@ -12,9 +14,8 @@ extends CharacterBody2D
 @onready var ray: RayCast2D = $RayCast2D
 @onready var bomb_placer: Node2D = $BombPlacer 
 @onready var history_manager: Node = $HistoryManager
-# REFERENCE TO THE VISUAL SPRITE
-# Ensure you have a child node named "Sprite" (or "Sprite2D") for this to work.
 @onready var sprite: Node2D = $Sprite2D
+@onready var walk_sound_emitter: FmodEventEmitter2D = $WalkSoundEmitter
 
 var is_moving: bool = false
 var input_buffer: Vector2 = Vector2.ZERO 
@@ -217,6 +218,8 @@ func move_player(target_pos: Vector2, start_delay: float = 0.0) -> void:
 	is_moving = true
 	_target_pos = target_pos 
 	
+	walk_sound_emitter.play()
+	
 	# TRIGGER JELLY ANIMATION
 	_animate_jelly(move_speed + 0.04)
 	
@@ -247,6 +250,12 @@ func trigger_explosion_sequence() -> void:
 func apply_knockback(direction: Vector2, distance: int) -> void:
 	if is_moving: return
 	is_moving = true
+	
+	# [NEW] SPAWN PUSHED SOUND
+	if player_pushed_sound:
+		var sound_instance = player_pushed_sound.instantiate()
+		get_parent().add_child(sound_instance)
+		sound_instance.global_position = global_position
 	
 	# Enable Knockback Protection Flags
 	is_knockback_active = true
@@ -511,6 +520,12 @@ func die() -> void:
 	if sprite:
 		sprite.visible = true
 		sprite.scale = default_scale
+		
+	# [NEW] SPAWN RESPAWN SOUND
+	if player_respawn_sound:
+		var sound_instance = player_respawn_sound.instantiate()
+		get_parent().add_child(sound_instance)
+		sound_instance.global_position = global_position
 		
 	set_process_unhandled_input(true)
 	set_physics_process(true)

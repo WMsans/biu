@@ -6,8 +6,12 @@ extends Node2D
 @export var duration: float = 1.0
 @export var particle_color: Color = Color.WHITE
 
+@export var sound_prefab: PackedScene 
+
 func _ready() -> void:
-	print_debug("hihihiha")
+	var sound = sound_prefab.instantiate()
+	sound.global_position = global_position
+	get_tree().get_root().add_child(sound)
 	# The parent layer might be at Z-Index -50, so we disable relative Z to break out.
 	z_as_relative = false
 	z_index = 100

@@ -1,7 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://1cyege8qdlkh"]
+[gd_scene load_steps=3 format=3 uid="uid://1cyege8qdlkh"]
 
 [ext_resource type="Script" uid="uid://djiwcoagnantr" path="res://scripts/fx/bomb_explosion.gd" id="1_wem4s"]
+[ext_resource type="PackedScene" uid="uid://cahdrahrkjf3u" path="res://scenes/prefabs/sounds/bomb_explosion_sound.tscn" id="2_c2i8j"]
 
 [node name="BombExplosion" type="Node2D"]
 script = ExtResource("1_wem4s")
 particle_color = Color(0.93876475, 0.7466861, 0.69229466, 1)
+sound_prefab = ExtResource("2_c2i8j")
