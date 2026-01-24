@@ -4,6 +4,7 @@ extends AnimatableBody2D
 @export var tile_map_layer: int = 1
 
 var is_floating: bool = false
+var is_moving: bool = false 
 var tile_size: int = 16
 
 # Water Restoration Data
@@ -157,11 +158,18 @@ func apply_knockback(dir: Vector2, max_dist: int) -> void:
 
 	# Use the class-level tween variable
 	if move_tween: move_tween.kill()
+	
+	is_moving = true
+	
 	move_tween = create_tween()
 	
 	move_tween.set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 	move_tween.tween_property(self, "global_position", target_pos, 0.4)
-	move_tween.tween_callback(check_on_water)
+	
+	move_tween.tween_callback(func():
+		check_on_water()
+		is_moving = false
+	)
 
 func get_snapshot() -> Dictionary:
 	# SERIALIZATION FIX: Convert Object reference to NodePath
@@ -235,6 +243,8 @@ func restore_data(data: Dictionary) -> void:
 	# Properly kill the specific tween
 	if move_tween:
 		move_tween.kill()
+	
+	is_moving = false
 
 func _set_outline_enabled(is_enabled: bool) -> void:
 	# 1. Check if material is on the Box node itself

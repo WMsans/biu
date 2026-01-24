@@ -209,10 +209,19 @@ func push_box(box: Node2D, direction: Vector2) -> void:
 	# Calculate target based on the clean, snapped position
 	var box_target = start_pos + (direction * tile_size)
 	
+	box.set("is_moving", true)
+	
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tween.tween_property(box, "position", box_target, move_speed)
-	tween.tween_callback(Callable(box, "check_on_water"))
+	
+	tween.tween_callback(func():
+		if box.has_method("check_on_water"):
+			box.check_on_water()
+		box.set("is_moving", false)
+	)
+	
+	move_player(box_target, 0.05)
 
 func move_player(target_pos: Vector2, start_delay: float = 0.0) -> void:
 	is_moving = true

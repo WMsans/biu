@@ -1,0 +1,35 @@
+[gd_scene load_steps=7 format=3 uid="uid://pei4jva02kqr"]
+
+[ext_resource type="Script" uid="uid://kjr4xpk82yyr" path="res://scripts/actors/bounce_block.gd" id="1_4kkh3"]
+[ext_resource type="Shader" uid="uid://djaneob775wmu" path="res://scripts/components/outline.gdshader" id="2_d0uy5"]
+[ext_resource type="Texture2D" uid="uid://di16ng7e2ma1o" path="res://textures/actors/woodcrate v2.png" id="3_xybjo"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0t13k"]
+shader = ExtResource("2_d0uy5")
+shader_parameter/enabled = true
+shader_parameter/line_color = Color(1, 1, 1, 0.5)
+shader_parameter/line_thickness = 8.00000038
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_weoh1"]
+size = Vector2(16, 16)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_y1l2d"]
+polygon = PackedVector2Array(-64, -64, -64, 64, 64, 64, 64, -64)
+
+[node name="Box" type="AnimatableBody2D" groups=["box"]]
+collision_layer = 4
+script = ExtResource("1_4kkh3")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_0t13k")
+scale = Vector2(0.125, 0.125)
+texture = ExtResource("3_xybjo")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_weoh1")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+scale = Vector2(0.125, 0.125)
+occluder = SubResource("OccluderPolygon2D_y1l2d")
+
+[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
