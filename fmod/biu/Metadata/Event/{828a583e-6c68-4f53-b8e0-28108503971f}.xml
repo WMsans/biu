@@ -8,7 +8,7 @@
 			<value>2</value>
 		</property>
 		<relationship name="folder">
-			<destination>{6740a9ad-8824-4481-a316-e742158d9a99}</destination>
+			<destination>{bdbe7e99-9e5d-4a66-b835-8fc8911a3e53}</destination>
 		</relationship>
 		<relationship name="mixer">
 			<destination>{a218d453-3ba1-4be9-899e-64b2e37144a6}</destination>
@@ -103,8 +103,8 @@
 	<object class="MixerBusEffectChain" id="{6c8a0aaf-e84b-4eb6-8a92-27bdab9ab25c}">
 		<relationship name="effects">
 			<destination>{2bc1f2a2-d28d-4848-a87f-3aab4552d9e6}</destination>
-			<destination>{3cf59bec-305c-4f87-aac3-98686d1afa3a}</destination>
 			<destination>{61d523ae-2038-4692-bccf-34d8621dbad5}</destination>
+			<destination>{792ececc-b840-479d-ba93-f1ea4003cac4}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{52a39d30-af03-43cd-acac-68df5fcd06b7}" />
@@ -118,13 +118,13 @@
 	</object>
 	<object class="MixerBusFader" id="{33b4ff19-94bd-4cf0-91b3-f0f58f3aa4f7}" />
 	<object class="MixerBusFader" id="{2bc1f2a2-d28d-4848-a87f-3aab4552d9e6}" />
-	<object class="SFXReverbEffect" id="{3cf59bec-305c-4f87-aac3-98686d1afa3a}" />
 	<object class="SpatialiserEffect" id="{61d523ae-2038-4692-bccf-34d8621dbad5}">
 		<property name="maximumDistance">
 			<value>50</value>
 		</property>
 		<property name="panBlend">
-			<value>0.604999959</value>
+			<value>0.104999997</value>
 		</property>
 	</object>
+	<object class="SFXReverbEffect" id="{792ececc-b840-479d-ba93-f1ea4003cac4}" />
 </objects>

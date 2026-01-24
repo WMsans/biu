@@ -1,7 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://ctq7bibpq7gvb"]
+[gd_scene load_steps=3 format=3 uid="uid://ctq7bibpq7gvb"]
 
 [ext_resource type="Script" uid="uid://72cpp7802o0n" path="res://scripts/fx/death_explosion.gd" id="1_y8r2o"]
+[ext_resource type="PackedScene" uid="uid://dst4t1npi5wmt" path="res://scenes/prefabs/sounds/player_death_sound.tscn" id="2_om6ru"]
 
 [node name="DeathExplosion" type="Node2D"]
 z_index = 10
 script = ExtResource("1_y8r2o")
+sound_prefab = ExtResource("2_om6ru")

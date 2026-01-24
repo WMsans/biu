@@ -7,11 +7,11 @@ extends StaticBody2D
 
 @export var death_effect_scene: PackedScene
 @export var recovery_clock_scene: PackedScene 
+@export var wall_recover_sound: PackedScene
 
 # Store initial layers to restore them later
 var _initial_layer: int
 var _initial_mask: int
-# [NEW] Store initial scale to handle LDTK resizing correctly
 var _initial_scale: Vector2
 
 func _ready() -> void:
@@ -25,7 +25,7 @@ func _ready() -> void:
 	_initial_layer = collision_layer
 	_initial_mask = collision_mask
 	
-	# [NEW] Capture the scale set by LevelEntityMapper before we modify it
+	# Capture the scale set by LevelEntityMapper before we modify it
 	_initial_scale = scale
 
 func import_ldtk_fields(fields: Dictionary) -> void:
@@ -54,8 +54,6 @@ func destroy() -> void:
 		get_parent().add_child(clock)
 		
 		# Center the clock on the wall. 
-		# If the wall's pivot is Top-Left, add half tile_size.
-		# If pivot is Center, just use global_position.
 		# Based on death_effect using global_position directly, we use that here.
 		clock.global_position = global_position 
 		
@@ -107,6 +105,13 @@ func _propagate_destruction() -> void:
 func _on_recover_timeout() -> void:
 	# Recover the wall
 	print("Wall recovering...")
+	
+	# [NEW] Spawn the wall recovery sound
+	if wall_recover_sound:
+		var sound = wall_recover_sound.instantiate()
+		sound.global_position = global_position
+		get_tree().get_root().add_child(sound)
+	
 	visible = true
 	collision_layer = _initial_layer
 	
